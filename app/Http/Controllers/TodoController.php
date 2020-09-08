@@ -40,10 +40,9 @@ class TodoController extends Controller
                 'title' => 'required'
             ],
             [
-                'title.required' => 'Todo input field is required !'
+                'title.required' => 'Todo input field is reuired!'
             ]
         );
-
         Todo::create($request->all());
     }
 
@@ -76,9 +75,11 @@ class TodoController extends Controller
      * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Todo $todo)
+    public function update(Request $request, $id)
     {
-        //
+        $todo = Todo::findOrFail($id);
+        $todo->update($request->all());
+        $todo->save();
     }
 
     /**
@@ -87,8 +88,10 @@ class TodoController extends Controller
      * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Todo $todo)
+    public function destroy($id)
     {
-        //
+        $todo = Todo::findOrFail($id);
+        $todo->delete();
+        return Todo::latest()->get();
     }
 }
